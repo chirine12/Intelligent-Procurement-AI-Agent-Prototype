@@ -1,0 +1,13 @@
+po_id,supplier_id,material,quantity,unit_price,order_date,promised_delivery_date,actual_delivery_date,status,plant,criticality_of_material,reject_reason
+4500000034,S021,MAT-5004,387.0,5.01,2026-04-25,2026-04-20,2026-05-20,Delivered,PL03,Low,promised_date_before_order_date
+4500000054,S016,MAT-4004,694.0,4.94,2026-05-03,2026-05-15,,Delivered,PL01,Medium,delivered_without_actual_date
+4500000089,S008,MAT-2001,89.0,147.13,2026-05-15,2026-05-10,2026-06-04,Delivered,PL01,High,promised_date_before_order_date
+4500000136,S025,MAT-5003,212.0,9.32,2026-06-01,2026-06-08,,Delivered,PL01,High,delivered_without_actual_date
+4500000149,S010,MAT-2001,255.0,126.75,2026-06-05,2026-07-27,,Delivered,PL02,High,delivered_without_actual_date
+4500000217,S006,MAT-2003,2580.0,2.9,2026-06-28,2026-06-23,2026-08-14,Delivered,PL03,Medium,promised_date_before_order_date
+4500000352,S999,MAT-4001,1704.0,7.77,2026-08-19,2026-10-10,,Open,PL02,High,unknown_supplier
+4500000360,S014,MAT-3003,188.0,10.25,2026-08-21,2026-09-10,,Delivered,PL03,Medium,delivered_without_actual_date
+4500000439,S019,MAT-4003,8776.0,0.24,2026-09-16,2026-09-11,,Open,PL03,Low,promised_date_before_order_date
+4500000486,S999,MAT-5001,132.0,24.18,2026-10-03,2026-11-18,,Cancelled,PL02,Medium,unknown_supplier
+4500000490,S999,MAT-3004,648.0,6.72,2026-10-05,2026-12-01,,Open,PL02,Low,unknown_supplier
+4500000491,S001,MAT-1002,301.0,18.37,2026-10-05,2026-09-30,,Open,PL03,Medium,promised_date_before_order_date

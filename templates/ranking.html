@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Risk ranking - Procurement Risk Agent{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Risk ranking</h1>
+  <p>Open purchase orders ranked by priority score. The priority is a ranking score, not a probability:
+     it is the composite risk weighted by criticality, value and urgency, so it never exceeds the risk.</p>
+</header>
+
+<form method="get" class="filters" id="level-filter">
+  {% for level in ['High', 'Medium', 'Low'] %}
+  <label><input type="checkbox" name="level" value="{{ level }}" {{ 'checked' if level in chosen }}>
+    <span class="level {{ level }}">{{ level }}</span></label>
+  {% endfor %}
+  <noscript><button class="btn" type="submit">Apply</button></noscript>
+  <span class="muted" style="align-self:center">{{ shown }} of {{ total }} orders</span>
+</form>
+
+<div class="counts">
+  <div><b>{{ shown }}</b><span>Orders shown</span></div>
+  {% for lvl, n, pct in levels %}
+  <div class="{{ lvl|lower }}"><b>{{ n }}</b><span>{{ lvl }} risk</span></div>
+  {% endfor %}
+  <div><b>{{ overdue }}</b><span>Overdue</span></div>
+  <div><b>{{ '{:,.0f}k'.format(value_at_risk / 1000) if value_at_risk >= 1000 else '{:,.0f}'.format(value_at_risk) }}</b><span>EUR in High and Medium risk orders</span></div>
+</div>
+
+<div class="dash">
+  <section class="panel pad dash-main">
+    <div class="chart-head">
+      <h3>Top {{ top|length }} orders by priority</h3>
+      <div class="legend">
+        <span><i class="sw High"></i>High</span><span><i class="sw Medium"></i>Medium</span><span><i class="sw Low"></i>Low</span>
+        <span><i class="sw-mark"></i>Composite risk</span>
+      </div>
+    </div>
+    <div class="hbars">
+      {% for o in top %}
+      <a class="hbar" href="{{ url_for('agent_page', po=o.po_id) }}" title="{{ o.risk_reasons }}">
+        <span class="hbar-rank">{{ o.rank }}</span>
+        <span class="hbar-label"><b>{{ o.po_id }}</b> {{ o.material }}</span>
+        <span class="hbar-track">
+          <i class="hbar-fill {{ o.risk_level }}" style="width: {{ o.priority_score }}%"></i>
+          <i class="hbar-mark" style="left: {{ o.composite_risk_score }}%"></i>
+        </span>
+        <span class="hbar-value">{{ '%.1f'|format(o.priority_score) }}</span>
+      </a>
+      {% else %}
+      <p class="muted">No order matches. Select at least one risk level.</p>
+      {% endfor %}
+    </div>
+    <div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+    <p class="muted" style="margin-bottom:0">Bar: priority score. Marker: composite risk score. Click a bar to investigate the order.</p>
+  </section>
+
+  <div class="dash-side">
+    <section class="panel pad">
+      <h3>Risk level mix</h3>
+      <div class="stack">
+        {% for lvl, n, pct in levels %}{% if n %}<i class="{{ lvl }}" style="width: {{ pct }}%" title="{{ lvl }}: {{ n }}"></i>{% endif %}{% endfor %}
+      </div>
+      <div class="stack-legend">
+        {% for lvl, n, pct in levels %}<span><i class="sw {{ lvl }}"></i>{{ lvl }} {{ n }} ({{ '%.0f'|format(pct) }}%)</span>{% endfor %}
+      </div>
+    </section>
+
+    <section class="panel pad">
+      <h3>What drives the risk</h3>
+      <p class="muted chart-sub">Orders with each risk factor</p>
+      {% for label, n, pct in drivers %}
+      <div class="vbar-row"><span class="vbar-label">{{ label }}</span>
+        <span class="vbar-track"><i style="width: {{ pct }}%"></i></span><span class="vbar-value">{{ n }}</span></div>
+      {% endfor %}
+    </section>
+  </div>
+</div>
+
+<div class="dash-pair">
+  <section class="panel pad">
+    <h3>Value at risk by category</h3>
+    <p class="muted chart-sub">Order value of High and Medium risk orders, EUR</p>
+    {% for label, v, pct in categories %}
+    <div class="vbar-row"><span class="vbar-label">{{ label }}</span>
+      <span class="vbar-track"><i class="accent" style="width: {{ pct }}%"></i></span><span class="vbar-value">{{ '{:,.0f}'.format(v) }}</span></div>
+    {% else %}
+    <p class="muted">No High or Medium risk order in this selection.</p>
+    {% endfor %}
+  </section>
+
+  <section class="panel pad">
+    <h3>Risk level by material criticality</h3>
+    <p class="muted chart-sub">Share of orders in each risk level</p>
+    {% for crit, n, segments in criticality %}
+    <div class="vbar-row"><span class="vbar-label">{{ crit }} criticality</span>
+      <span class="stack small">{% for lvl, c, pct in segments %}{% if c %}<i class="{{ lvl }}" style="width: {{ pct }}%" title="{{ lvl }}: {{ c }}"></i>{% endif %}{% endfor %}</span>
+      <span class="vbar-value">{{ n }}</span></div>
+    {% endfor %}
+  </section>
+</div>
+
+<h2>All orders</h2>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th class="num">Rank</th><th>PO number</th><th>Material</th><th>Criticality</th>
+        <th class="num">Value (EUR)</th><th class="num">Days to delivery</th><th>Observed status</th>
+        <th>Supplier late rate</th><th class="num">Rule score</th><th>Composite risk</th><th>Priority</th><th>Reasons</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for o in orders %}
+      <tr>
+        <td class="num"><b>{{ o.rank }}</b></td>
+        <td><a href="{{ url_for('agent_page', po=o.po_id) }}">{{ o.po_id }}</a></td>
+        <td>{{ o.material }}</td>
+        <td>{{ o.criticality_of_material }}</td>
+        <td class="num">{{ '{:,.2f}'.format(o.order_value) }}</td>
+        <td class="num">{{ o.days_until_delivery }}</td>
+        <td>{{ o.observed_status }}</td>
+        <td class="cell-meter">{{ '%.0f'|format(o.supplier_late_rate * 100) }}%<div class="meter"><i style="width: {{ o.supplier_late_rate * 100 }}%"></i></div></td>
+        <td class="num">{{ o.rule_risk_score }}</td>
+        <td class="cell-meter"><span class="level {{ o.risk_level }}">{{ o.risk_level }}</span> {{ '%.1f'|format(o.composite_risk_score) }}<div class="meter {{ o.risk_level }}"><i style="width: {{ o.composite_risk_score }}%"></i></div></td>
+        <td class="cell-meter">{{ '%.1f'|format(o.priority_score) }}<div class="meter"><i style="width: {{ o.priority_score }}%"></i></div></td>
+        <td class="reasons">{{ o.risk_reasons }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="12">No order matches. Select at least one risk level.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.querySelectorAll("#level-filter input").forEach(function (box) {
+    box.addEventListener("change", function () { box.form.submit(); });
+  });
+</script>
+{% endblock %}

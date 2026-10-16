@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-head">
+  <h1>Orders to look at first</h1>
+  <p>{{ total }} open purchase orders scored on {{ as_of }}. The agent ranks them by priority:
+     risk, weighted by material criticality, order value and urgency.</p>
+</header>
+
+{% if regenerated %}
+<div class="callout good" style="margin: 0 0 20px">Data regenerated and processed again. The seed is fixed, so the results are identical.</div>
+{% endif %}
+
+<div class="queue">
+  {% for o in queue %}
+  <a class="queue-row" href="{{ url_for('agent_page', po=o.po_id) }}">
+    <div class="queue-rank">{{ o.rank }}</div>
+    <div>
+      <div class="queue-po">PO {{ o.po_id }}</div>
+      <div class="muted">{{ o.material }} · {{ o.criticality_of_material }} criticality · {{ '{:,.0f}'.format(o.order_value) }} EUR</div>
+    </div>
+    <div class="queue-reasons">{{ o.risk_reasons }}</div>
+    <div class="queue-meter">
+      <div class="meter-label"><span class="level {{ o.risk_level }}">{{ o.risk_level }} risk</span><span>Priority {{ '%.1f'|format(o.priority_score) }}</span></div>
+      <div class="meter {{ o.risk_level }}"><i style="width: {{ o.priority_score }}%"></i></div>
+    </div>
+    <div class="queue-open">Investigate</div>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="counts">
+  <div><b>{{ total }}</b><span>Open orders scored</span></div>
+  <div class="high"><b>{{ high }}</b><span>High risk, need action now</span></div>
+  <div class="medium"><b>{{ medium }}</b><span>Medium risk, reminder recommended</span></div>
+  <div><b>{{ overdue }}</b><span>Already past the promised date</span></div>
+</div>
+<p class="muted"><a href="{{ url_for('ranking') }}">See all {{ total }} orders in the ranking</a></p>
+
+<h2>How the agent works</h2>
+<ol class="steps">
+  <li><h3>Data</h3><p>SAP-like purchase orders, suppliers, deliveries and stock are generated, validated and cleaned.</p></li>
+  <li><h3>Risk engine</h3><p>Business rules and the supplier's historical late rate give a composite risk; a priority score ranks the orders.</p></li>
+  <li><h3>Agent</h3><p>Investigates the top orders with mock SAP tools and recommends actions. Sensitive actions wait for your approval.</p></li>
+  <li><h3>Audit</h3><p>Every tool call, decision and approval is written to an append-only log.</p></li>
+</ol>
+
+{% if datasets %}
+<h2>Data quality</h2>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Dataset</th><th class="num">Raw rows</th><th class="num">Clean rows</th><th class="num">Removed</th></tr></thead>
+    <tbody>
+    {% for name, raw, clean, removed in datasets %}
+      <tr><td>{{ name }}</td><td class="num">{{ '{:,}'.format(raw) }}</td><td class="num">{{ '{:,}'.format(clean) }}</td><td class="num">{{ removed }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<details class="disclose">
+  <summary>Issues found and how they were handled ({{ issues|length }})</summary>
+  <div>
+    <table>
+      <thead><tr><th>Dataset</th><th>Issue</th><th class="num">Count</th></tr></thead>
+      <tbody>
+      {% for dataset, issue, count in issues %}
+        <tr><td>{{ dataset }}</td><td>{{ issue }}</td><td class="num">{{ count }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</details>
+{% endif %}
+
+<h2>Start again from scratch</h2>
+<form method="post" action="{{ url_for('setup_run') }}" data-busy class="toolbar">
+  <button class="btn" type="submit">Regenerate the data</button>
+  <span class="busy-msg">Generating the data and cleaning it. This takes a few seconds.</span>
+</form>
+<p class="note">The seed is fixed, so regenerating gives identical results.</p>
+{% endblock %}

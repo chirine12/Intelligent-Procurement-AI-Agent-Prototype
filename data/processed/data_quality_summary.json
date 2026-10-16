@@ -1,0 +1,51 @@
+{
+  "suppliers": {
+    "duplicate_supplier_ids_removed": 1,
+    "missing_payment_terms_set_to_unknown": 2
+  },
+  "stock_levels": {
+    "missing_safety_stock_imputed": 1
+  },
+  "deliveries_history": {
+    "duplicate_rows_removed": 10,
+    "unknown_supplier_rows_removed": 0,
+    "supplier_names_normalized": 60,
+    "supplier_names_not_matching_master": 0,
+    "missing_actual_date_rows_removed": 8
+  },
+  "purchase_orders": {
+    "duplicate_rows_removed": 8,
+    "rejected_unknown_supplier": 3,
+    "rejected_promised_date_before_order_date": 5,
+    "rejected_delivered_without_actual_date": 4,
+    "missing_unit_price_imputed": 10,
+    "missing_quantity_imputed": 5,
+    "missing_criticality_filled": 6,
+    "remaining_missing_values": 0
+  },
+  "row_counts": {
+    "suppliers": {
+      "raw": 26,
+      "clean": 25
+    },
+    "purchase_orders": {
+      "raw": 508,
+      "clean": 488
+    },
+    "deliveries_history": {
+      "raw": 1210,
+      "clean": 1192
+    },
+    "stock_levels": {
+      "raw": 20,
+      "clean": 20
+    }
+  },
+  "feature_tables": {
+    "closed_orders_rows": 1607,
+    "closed_orders_late_rate": 0.305,
+    "open_orders_rows": 68,
+    "open_orders_overdue": 6,
+    "cancelled_orders_excluded": 5
+  }
+}

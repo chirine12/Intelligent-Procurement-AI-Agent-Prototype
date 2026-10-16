@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Audit log - Procurement Risk Agent{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Audit log</h1>
+  <p>Every tool call, recommendation, guardrail decision and approval, append-only, one JSON object per line.</p>
+</header>
+<p class="muted" style="margin-top:-16px">{{ path }}</p>
+
+{% if not runs %}
+<div class="callout">The audit log is empty. Run an investigation, or <code>python -m src.main run</code>.</div>
+{% else %}
+<form method="get" class="panel pad toolbar">
+  <label class="field">Run
+    <select name="run">
+      <option value="all" {{ 'selected' if run == 'all' }}>All runs</option>
+      {% for r in runs %}<option {{ 'selected' if r == run }}>{{ r }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="field">PO number
+    <select name="po">
+      <option value="all">All POs</option>
+      {% for p in pos %}<option {{ 'selected' if p == po }}>{{ p }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="field">Event type
+    <select name="event" multiple size="4">
+      {% for ev in all_events %}<option {{ 'selected' if ev in events }}>{{ ev }}</option>{% endfor %}
+    </select>
+  </label>
+  <button class="btn" type="submit">Filter</button>
+  <a class="btn" href="{{ request.full_path }}{{ '&' if '?' in request.full_path else '?' }}format=csv">Download CSV</a>
+</form>
+
+<div class="counts" style="margin:18px 0">
+  <div><b>{{ entries|length }}</b><span>Entries shown</span></div>
+  <div><b style="color:var(--good)">{{ granted }}</b><span>Approvals granted by a human</span></div>
+  <div class="high"><b>{{ denied }}</b><span>Approvals denied, action not executed</span></div>
+  <div><b>{{ runs|length }}</b><span>Runs in the log (CLI and web)</span></div>
+</div>
+
+<p class="muted">Newest first.</p>
+<div class="table-wrap">{% include "_audit_table.html" %}</div>
+{% endif %}
+{% endblock %}

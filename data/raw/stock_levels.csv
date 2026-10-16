@@ -1,0 +1,21 @@
+material,material_description,current_stock,safety_stock,daily_consumption
+MAT-1001,Steel Sheet 2mm,594,368.0,27
+MAT-1002,Aluminium Profile,1280,489.0,40
+MAT-1003,Copper Wire Coil,36,103.0,10
+MAT-1004,Stainless Rod 10mm,633,200.0,20
+MAT-2001,Control Board PCB,270,92.0,8
+MAT-2002,Proximity Sensor,110,179.0,17
+MAT-2003,Power Connector,3359,991.0,133
+MAT-2004,LED Indicator,4671,4002.0,333
+MAT-3001,Cardboard Box L,1605,1887.0,200
+MAT-3002,Protective Foam,2507,,100
+MAT-3003,Wooden Pallet,528,369.0,27
+MAT-3004,Stretch Film Roll,1076,340.0,33
+MAT-4001,Ball Bearing 6204,650,992.0,80
+MAT-4002,Gear Shaft,129,154.0,12
+MAT-4003,Hex Bolt M8,14533,6509.0,667
+MAT-4004,Hydraulic Seal,1102,568.0,53
+MAT-5001,Industrial Adhesive,423,110.0,13
+MAT-5002,Powder Coating,752,166.0,23
+MAT-5003,Machine Lubricant,745,362.0,27
+MAT-5004,Cleaning Solvent,312,150.0,20

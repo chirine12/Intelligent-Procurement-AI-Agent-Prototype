@@ -1,0 +1,27 @@
+supplier_id,name,country,category,payment_terms
+S001,Rheinstahl GmbH,DE,Raw Materials,NET30
+S002,Nordic Alloys AB,SE,Raw Materials,
+S003,Iberia Metals SA,ES,Raw Materials,NET60
+S004,Anatolia Steel AS,TR,Raw Materials,NET45
+S005,Silesia Aluminium Sp,PL,Raw Materials,NET45
+S006,Shenzhen Microtech Ltd,CN,Electronics,NET90
+S007,Taipei Circuits Co,TW,Electronics,NET30
+S008,Bavaria Sensorik GmbH,DE,Electronics,NET60
+S009,Penang Semicon Sdn,MY,Electronics,NET30
+S010,Lyon Electronics Ltd,FR,Electronics,NET30
+S011,Danube Packaging Kft,HU,Packaging,NET60
+S012,Flanders Carton NV,BE,Packaging,NET90
+S013,Lombardia Imballaggi Srl,IT,Packaging,NET60
+S014,Baltic Pack OU,EE,Packaging,NET90
+S015,Tunis Packaging Ltd,TN,Packaging,NET60
+S016,Schwaben Praezision GmbH,DE,Mechanical Parts,NET90
+S017,Bohemia Bearings sro,CZ,Mechanical Parts,NET60
+S018,Pune Forgings Pvt Ltd,IN,Mechanical Parts,NET30
+S019,Torino Meccanica SpA,IT,Mechanical Parts,
+S020,Midlands Fasteners Ltd,GB,Mechanical Parts,NET45
+S021,Rotterdam Chemie BV,NL,Chemicals,NET60
+S022,Basel Coatings AG,CH,Chemicals,NET45
+S023,Gujarat Polymers Ltd,IN,Chemicals,NET30
+S024,Texas Lubricants Inc,US,Chemicals,NET90
+S025,Catalonia Resins SL,ES,Chemicals,NET90
+S008,BAVARIA SENSORIK GMBH ,DE,Electronics,NET60

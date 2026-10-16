@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google" content="notranslate">
+  <title>{% block title %}Procurement Risk Agent{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="brand">Procurement Risk Agent<span>Simulated SAP purchasing</span></div>
+    <nav aria-label="Pages">
+      {% for key, label, endpoint in [
+        ('overview', 'Overview', 'overview'), ('ranking', 'Risk ranking', 'ranking'),
+        ('agent', 'Agent investigation', 'agent_page'),
+        ('audit', 'Audit log', 'audit_page'), ('tests', 'Tests', 'tests')] %}
+        <a href="{{ url_for(endpoint) }}" class="{{ 'active' if page == key }}"
+           {% if page == key %}aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <dl class="context">
+      <dt>Data as of</dt><dd>{{ as_of }}</dd>
+      <dt>Explanations</dt><dd>{{ 'LLM (Groq key found)' if has_llm_key else 'Templates (no Groq key)' }}</dd>
+      <dt>Approval tiers</dt><dd>{{ '{:,}'.format(tier_low) }} / {{ '{:,}'.format(tier_high) }} EUR</dd>
+      <dt>SAP data and actions</dt><dd>Simulated</dd>
+    </dl>
+  </aside>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</div>
+<script>
+  // Long requests (setup, tests, investigation): disable the button and say what is running.
+  document.querySelectorAll("form[data-busy]").forEach(function (form) {
+    form.addEventListener("submit", function () {
+      form.classList.add("is-busy");
+      form.querySelectorAll("button[type=submit]").forEach(function (b) { b.disabled = true; });
+    });
+  });
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}PO {{ po.po_id }} - Procurement Risk Agent{% endblock %}
+{% block content %}
+<p class="muted" style="margin:0"><a href="{{ url_for('agent_page', po=po.po_id) }}">Agent investigation</a> / PO {{ po.po_id }}</p>
+
+<div class="order-head">
+  <div>
+    <h2>PO {{ po.po_id }}, {{ po.material_description }}</h2>
+    <p>Rank {{ scores.rank }} of the open orders · {{ '{:,.2f}'.format(po.order_value_eur) }} EUR · plant {{ po.plant }}</p>
+  </div>
+  <span class="level {{ scores.risk_level }}" style="font-size:.95rem; padding:4px 12px">{{ scores.risk_level }} risk</span>
+</div>
+
+<div class="counts">
+  <div><b>{{ '%.1f'|format(scores.priority_score) }}</b><span>Priority, rank {{ scores.rank }}</span></div>
+  <div class="{{ 'high' if scores.risk_level == 'High' else 'medium' if scores.risk_level == 'Medium' }}"><b>{{ '%.1f'|format(scores.composite_risk_score) }}</b><span>Composite risk</span></div>
+  <div><b>{{ scores.supplier_late_rate_text }}</b><span>Supplier late rate (past deliveries)</span></div>
+  <div class="{{ 'high' if scores.observed_status != 'On track' }}"><b style="font-size:1.2rem; padding:6px 0 4px">{{ scores.observed_status }}</b><span>Observed status (fact)</span></div>
+  <div><b>{{ scores.rule_risk_score }}</b><span>Rule score out of 100</span></div>
+</div>
+<p class="muted">{{ formula }} The supplier late rate is a statistic on its past deliveries; the overdue flag is a fact about this order. Weights in config.COMPOSITE_WEIGHTS.</p>
+
+<h2>Risk factors</h2>
+<ul class="reason-list">{% for r in facts.risk_reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+
+<h2>What the agent retrieved from SAP (mock tools)</h2>
+<div class="tabs" role="tablist">
+  {% for title, rows in tabs %}
+  <button type="button" role="tab" id="tab-{{ loop.index }}" aria-controls="panel-{{ loop.index }}" aria-selected="{{ 'true' if loop.first else 'false' }}">{{ title }}</button>
+  {% endfor %}
+  <button type="button" role="tab" id="tab-alt" aria-controls="panel-alt" aria-selected="false">Alternative suppliers</button>
+</div>
+{% for title, rows in tabs %}
+<div class="panel tab-panel" role="tabpanel" id="panel-{{ loop.index }}" aria-labelledby="tab-{{ loop.index }}" {{ '' if loop.first else 'hidden' }}>
+  <table class="kv"><tbody>
+    {% for label, text, tone in rows %}<tr><td>{{ label }}</td><td class="{{ tone }}">{{ text }}</td></tr>{% endfor %}
+  </tbody></table>
+</div>
+{% endfor %}
+<div class="panel tab-panel pad" role="tabpanel" id="panel-alt" aria-labelledby="tab-alt" hidden>
+  {% if facts.alternative_suppliers %}
+  <table><thead><tr><th>Supplier</th><th>On-time rate</th><th>Reliable</th></tr></thead><tbody>
+    {% for a in facts.alternative_suppliers %}
+    <tr><td>{{ a.name }}</td><td>{{ a.on_time_rate }}</td><td class="{{ 'good' if a.is_reliable else 'bad' }}"><span class="tag {{ 'good' if a.is_reliable else 'bad' }}">{{ 'Yes' if a.is_reliable else 'No' }}</span></td></tr>
+    {% endfor %}
+  </tbody></table>
+  {% else %}
+  <p style="margin:0">Not looked up: the current supplier is reliable.</p>
+  {% endif %}
+</div>
+
+{% set source = 'LLM (Groq)' if narrative.source == 'llm' else 'template' %}
+<h2>Explanation and recommendation</h2>
+<div class="split">
+  <div class="narrative"><h3>Why this order is at risk</h3><p>{{ narrative.explanation }}</p></div>
+  <div class="narrative rec"><h3>What to do</h3><p>{{ narrative.recommendation }}</p></div>
+</div>
+<p class="muted">Written by the {{ source }}.{% if narrative.fallback_reason %} Template used: {{ narrative.fallback_reason }}{% endif %}</p>
+<details class="disclose">
+  <summary>Draft reminder email (simulated, not sent)</summary>
+  <div><pre class="email">{{ narrative.reminder_email }}</pre></div>
+</details>
+
+<h2>Actions</h2>
+{% set target = url_for('execute', token=token) if outcomes is none else url_for('resolve', token=token) %}
+<form method="post" action="{{ target }}">
+  {% for c in cards %}
+  <div class="action">
+    <div>
+      <div class="action-name">{{ c.name }}</div>
+      <p>{{ c.reason }}</p>
+    </div>
+    <div>
+      {% set tone = {'allowed': 'good', 'needs_approval': 'warn', 'blocked': 'bad'}[c.guardrail.decision] %}
+      <span class="tag {{ tone }}">{{ c.label }}</span>
+      <div class="rule"><b>Rule:</b> {{ c.guardrail.rule_fired }}</div>
+      <div class="rule"><b>Approver:</b> {{ c.guardrail.approver or 'none' }}</div>
+      {% if c.guardrail.decision == 'needs_approval' %}
+      <div class="decide" style="margin-top:12px">
+        {% set current = 'approve' if c.outcome and c.outcome.approved == true else 'reject' if c.outcome and c.outcome.approved == false else 'pending' %}
+        <div class="segmented {{ 'disabled' if c.decided }}" role="radiogroup" aria-label="Decision on {{ c.name }}">
+          {% for value, label in [('pending', 'Pending'), ('approve', 'Approve'), ('reject', 'Reject')] %}
+          <label><input type="radio" name="decision-{{ c.name }}" value="{{ value }}" {{ 'checked' if value == current }} {{ 'disabled' if c.decided }}>{{ label }}</label>
+          {% endfor %}
+        </div>
+        <input type="text" name="reason-{{ c.name }}" aria-label="Reason for the decision on {{ c.name }}"
+               placeholder="Reason, stored in the audit log (optional)"
+               value="{{ c.outcome.approval_reason if c.outcome and c.outcome.approval_reason else '' }}" {{ 'disabled' if c.decided }}>
+      </div>
+      {% elif c.guardrail.decision == 'blocked' %}
+      <p class="blocked-note">This action is blocked by policy and will not run.</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+
+  {% if outcomes is none %}
+  <button class="btn primary" type="submit">Execute allowed actions</button>
+  <span class="muted">Automatic actions run now. Actions left on Pending wait for a decision.</span>
+  {% elif pending %}
+  <button class="btn primary" type="submit">Submit decisions on pending actions</button>
+  {% endif %}
+</form>
+
+{% if outcomes is not none %}
+<h2 id="outcome">Outcome</h2>
+{% for o in outcomes.values() %}
+<div class="outcome {{ o.status }}">
+  <b>{{ o.action }}</b>
+  <span>
+  {% if o.status == 'blocked' %}Blocked by policy: {{ o.rule_fired }}
+  {% elif o.status == 'rejected' %}Not executed, rejected (approver: {{ o.approver }}){% if o.approval_reason %}. Reason: {{ o.approval_reason }}{% endif %}
+  {% elif o.status == 'pending' %}Pending, waiting for the {{ o.approver }}
+  {% elif o.status == 'executed' %}Executed (simulated) {{ 'after approval by the ' ~ o.approver if o.approved else 'automatically' }}
+  {% else %}{{ o.result }}{% endif %}
+  </span>
+</div>
+{% endfor %}
+<p class="muted">{{ counts.executed }} executed, {{ counts.pending }} pending, {{ counts.rejected }} rejected,
+  {{ counts.blocked }} blocked{% if counts.other %}, {{ counts.other }} monitoring or handed over{% endif %}. All actions are simulated.</p>
+
+<details class="disclose" open>
+  <summary>Audit trail of this investigation ({{ entries|length }} entries)</summary>
+  <div class="table-wrap" style="border:0">
+    {% include "_audit_table.html" %}
+  </div>
+</details>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+  // Tabs: one panel visible at a time, arrow keys move between tabs.
+  var tabs = Array.prototype.slice.call(document.querySelectorAll("[role=tab]"));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute("aria-selected", on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.tabIndex = i === 0 ? 0 : -1;
+    tab.addEventListener("click", function () { select(tab); });
+    tab.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") select(tabs[(i + 1) % tabs.length]);
+      if (e.key === "ArrowLeft") select(tabs[(i - 1 + tabs.length) % tabs.length]);
+    });
+  });
+</script>
+{% endblock %}

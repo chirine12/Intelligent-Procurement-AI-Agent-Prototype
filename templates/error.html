@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-head">
+  <h1>Page not found</h1>
+  <p>{{ message }}</p>
+</header>
+<a class="btn" href="{{ url_for('overview') }}">Go to the overview</a>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Agent investigation - Procurement Risk Agent{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Agent investigation</h1>
+  <p>Pick an order. The agent calls the mock SAP tools, explains the risk and proposes actions.
+     Nothing runs until you execute, and sensitive actions wait for your decision.</p>
+</header>
+
+<form method="post" action="{{ url_for('investigate') }}" data-busy class="panel pad">
+  <div class="toolbar" style="margin-bottom:0">
+    <label class="field grow">Purchase order
+      <select name="po">
+        {% for o in orders %}
+        <option value="{{ o.po_id }}" {{ 'selected' if o.po_id == selected }}>
+          #{{ o.rank }}  PO {{ o.po_id }} - {{ o.material }} - {{ o.risk_level }} risk</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="check" title="{{ '' if has_llm_key else 'GROQ_API_KEY is not set, templates are used' }}">
+      <input type="checkbox" name="use_llm" value="1" {{ 'checked' if has_llm_key }} {{ 'disabled' if not has_llm_key }}>
+      Write the explanation with the LLM (Groq)
+    </label>
+    <button class="btn primary" type="submit">Investigate</button>
+  </div>
+  <p class="busy-msg" style="margin:10px 0 0">Calling the mock SAP tools and preparing the explanation...</p>
+</form>
+
+<h2 id="guardrail">Try the guardrail on any action</h2>
+<form method="get" action="{{ url_for('agent_page') }}#guardrail" class="panel pad">
+  <input type="hidden" name="po" value="{{ selected }}">
+  <div class="toolbar">
+    <label class="field">Action
+      <select name="try_action">
+        {% for a in actions %}<option {{ 'selected' if a == try_action }}>{{ a }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="field">Order value (EUR)
+      <input type="number" name="try_value" value="{{ try_value }}" min="0" step="500">
+    </label>
+    <button class="btn" type="submit">Check</button>
+  </div>
+  {% set tone = {'allowed': 'good', 'needs_approval': 'warn', 'blocked': 'bad'}[try_result.decision] %}
+  <span class="tag {{ tone }}">{{ {'allowed': 'Automatic', 'needs_approval': 'Needs approval', 'blocked': 'Blocked by policy'}[try_result.decision] }}</span>
+  <div class="rule"><b>Rule:</b> {{ try_result.rule_fired }}</div>
+  <div class="rule"><b>Approver:</b> {{ try_result.approver or 'none' }}</div>
+  <p class="muted" style="margin-bottom:0">Sensitive actions are automatic under {{ '{:,}'.format(rules.sensitive_automatic_below) }} EUR,
+    need the {{ rules.manager_role }} up to {{ '{:,}'.format(rules.manager_approval_up_to) }} EUR and the {{ rules.director_role }} above.
+    Blocked: {{ rules.blocked_actions|join(', ') }}; any unlisted action is blocked too.</p>
+</form>
+{% endblock %}

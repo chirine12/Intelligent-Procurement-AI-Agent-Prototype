@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Tests - Procurement Risk Agent{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Automated tests</h1>
+  <p>pytest builds a fresh pipeline in a temporary folder and never calls the LLM API.</p>
+</header>
+
+<form method="post" action="{{ url_for('tests_run') }}" data-busy class="toolbar">
+  <button class="btn primary" type="submit">Run all tests</button>
+  <span class="busy-msg">Running pytest. This takes about half a minute.</span>
+</form>
+
+{% if result %}
+<section id="results">
+  {% set total = result.tests|length %}
+  <div class="callout {{ 'good' if total and result.passed == total else 'bad' }}" style="margin:0 0 18px">
+    {{ result.passed }} of {{ total }} tests passed.</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Status</th><th>Test</th><th class="num">Seconds</th><th>What it checks</th></tr></thead>
+      <tbody>
+      {% for t in result.tests %}
+        <tr><td><span class="tag {{ 'good' if t.status == 'passed' else 'bad' }}">{{ t.status }}</span></td>
+          <td>{{ t.name }}</td><td class="num">{{ '%.2f'|format(t.time) }}</td><td>{{ t.description }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <details class="disclose"><summary>Full pytest output</summary><div><pre class="output">{{ result.output }}</pre></div></details>
+</section>
+{% else %}
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Test</th><th>What it checks</th></tr></thead>
+    <tbody>
+    {% for name, text in descriptions.items() %}<tr><td>{{ name }}</td><td>{{ text }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

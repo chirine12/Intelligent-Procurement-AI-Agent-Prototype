@@ -1,0 +1,69 @@
+rank,po_id,supplier_id,material,criticality_of_material,order_value,promised_delivery_date,days_until_delivery,is_overdue,stock_coverage_days,below_safety_stock,supplier_on_time_rate,supplier_late_rate,observed_status,rule_risk_score,composite_risk_score,risk_level,priority_score,risk_reasons
+1,4500000337,S008,MAT-2002,High,11642.96,2026-10-09,-3,True,6.5,True,0.358,0.642,Overdue by 3 day(s),65,80.6,High,75.5,Overdue by 3 day(s); Stock below safety stock (110 < 179); Unreliable supplier (36% on time over 67 deliveries)
+2,4500000417,S018,MAT-4002,High,12061.44,2026-10-11,-1,True,10.8,True,0.7,0.3,Overdue by 1 day(s),40,64.5,High,60.7,Overdue by 1 day(s); Stock below safety stock (129 < 154)
+3,4500000342,S002,MAT-1001,High,13237.56,2026-10-11,-1,True,22.0,False,0.806,0.194,Overdue by 1 day(s),0,49.8,Medium,47.3,Overdue by 1 day(s)
+4,4500000426,S006,MAT-2004,Low,6045.86,2026-10-07,-5,True,14.0,False,0.23,0.77,Overdue by 5 day(s),25,71.8,High,46.3,Overdue by 5 day(s); Unreliable supplier (23% on time over 61 deliveries)
+5,4500000427,S011,MAT-3004,Low,3673.3,2026-10-09,-3,True,32.6,False,0.659,0.341,Overdue by 3 day(s),25,61.0,High,38.3,Overdue by 3 day(s); Unreliable supplier (66% on time over 85 deliveries)
+6,4500000450,S005,MAT-1004,Low,13148.8,2026-10-03,-9,True,31.6,False,0.911,0.089,Overdue by 9 day(s),0,47.2,Medium,33.0,Overdue by 9 day(s)
+7,4500000429,S017,MAT-4001,High,11435.64,2026-11-11,30,False,8.1,True,0.658,0.342,On track,100,38.6,Medium,32.3,"Stock below safety stock (650 < 992); Stock covers 8 day(s), delivery promised in 30 day(s); Unreliable supplier (66% on time over 79 deliveries)"
+8,4500000434,S001,MAT-1003,High,21105.42,2026-10-17,5,False,3.6,True,0.701,0.299,On track,75,30.0,Low,29.5,"Stock below safety stock (36 < 103); Stock covers 4 day(s), delivery promised in 5 day(s)"
+9,4500000447,S018,MAT-4001,High,12451.24,2026-10-21,9,False,8.1,True,0.7,0.3,On track,75,30.0,Low,27.4,"Stock below safety stock (650 < 992); Stock covers 8 day(s), delivery promised in 9 day(s)"
+10,4500000452,S018,MAT-4001,High,11791.94,2026-10-27,15,False,8.1,True,0.7,0.3,On track,75,30.0,Low,26.7,"Stock below safety stock (650 < 992); Stock covers 8 day(s), delivery promised in 15 day(s)"
+11,4500000422,S004,MAT-1003,High,26506.06,2026-11-07,26,False,3.6,True,0.746,0.254,On track,75,28.8,Low,26.3,"Stock below safety stock (36 < 103); Stock covers 4 day(s), delivery promised in 26 day(s)"
+12,4500000420,S019,MAT-4002,High,10107.63,2026-10-18,6,False,10.8,True,0.661,0.339,On track,65,28.0,Low,25.4,Stock below safety stock (129 < 154); Unreliable supplier (66% on time over 59 deliveries)
+13,4500000475,S002,MAT-1003,High,11274.12,2026-11-08,27,False,3.6,True,0.806,0.194,On track,75,27.4,Low,23.1,"Stock below safety stock (36 < 103); Stock covers 4 day(s), delivery promised in 27 day(s)"
+14,4500000477,S002,MAT-1003,High,12237.72,2026-11-11,30,False,3.6,True,0.806,0.194,On track,75,27.4,Low,23.1,"Stock below safety stock (36 < 103); Stock covers 4 day(s), delivery promised in 30 day(s)"
+15,4500000493,S003,MAT-1003,High,14328.0,2026-11-05,24,False,3.6,True,0.847,0.153,On track,75,26.3,Low,23.1,"Stock below safety stock (36 < 103); Stock covers 4 day(s), delivery promised in 24 day(s)"
+16,4500000466,S011,MAT-3001,Low,5182.72,2026-11-13,32,False,8.0,True,0.659,0.341,On track,100,38.5,Medium,20.7,"Stock below safety stock (1605 < 1887); Stock covers 8 day(s), delivery promised in 32 day(s); Unreliable supplier (66% on time over 85 deliveries)"
+17,4500000456,S010,MAT-2001,High,30959.38,2026-10-13,1,False,33.8,False,0.516,0.484,On track,25,19.6,Low,19.5,Unreliable supplier (52% on time over 64 deliveries)
+18,4500000487,S006,MAT-2004,Low,2997.1,2026-11-30,49,False,14.0,False,0.23,0.77,On track,60,37.2,Medium,19.4,"Stock covers 14 day(s), delivery promised in 49 day(s); Unreliable supplier (23% on time over 61 deliveries)"
+19,4500000483,S012,MAT-3003,Medium,5554.92,2026-11-24,43,False,19.6,False,0.618,0.382,On track,60,27.6,Low,18.4,"Stock covers 20 day(s), delivery promised in 43 day(s); Unreliable supplier (62% on time over 55 deliveries)"
+20,4500000470,S025,MAT-5003,High,3644.2,2026-10-16,4,False,27.6,False,0.452,0.548,On track,25,21.2,Low,18.3,Unreliable supplier (45% on time over 62 deliveries)
+21,4500000393,S011,MAT-3001,Low,6460.0,2026-10-14,2,False,8.0,True,0.659,0.341,On track,65,28.0,Low,18.0,Stock below safety stock (1605 < 1887); Unreliable supplier (66% on time over 85 deliveries)
+22,4500000416,S025,MAT-5003,High,4400.82,2026-10-22,10,False,27.6,False,0.452,0.548,On track,25,21.2,Low,18.0,Unreliable supplier (45% on time over 62 deliveries)
+23,4500000462,S017,MAT-4004,Medium,2155.52,2026-11-05,24,False,20.8,False,0.658,0.342,On track,60,26.6,Low,17.6,"Stock covers 21 day(s), delivery promised in 24 day(s); Unreliable supplier (66% on time over 79 deliveries)"
+24,4500000471,S025,MAT-5004,Low,2182.8,2026-11-13,32,False,15.6,False,0.452,0.548,On track,60,31.7,Low,16.4,"Stock covers 16 day(s), delivery promised in 32 day(s); Unreliable supplier (45% on time over 62 deliveries)"
+25,4500000451,S004,MAT-1001,High,18458.01,2026-11-07,26,False,22.0,False,0.746,0.254,On track,35,16.8,Low,15.1,"Stock covers 22 day(s), delivery promised in 26 day(s)"
+26,4500000390,S008,MAT-2004,Low,5526.72,2026-10-20,8,False,14.0,False,0.358,0.642,On track,25,23.5,Low,14.4,Unreliable supplier (36% on time over 67 deliveries)
+27,4500000455,S011,MAT-3004,Low,4926.36,2026-11-16,35,False,32.6,False,0.659,0.341,On track,60,26.5,Low,14.2,"Stock covers 33 day(s), delivery promised in 35 day(s); Unreliable supplier (66% on time over 85 deliveries)"
+28,4500000425,S010,MAT-2003,Medium,4394.52,2026-10-26,14,False,25.3,False,0.516,0.484,On track,25,19.6,Low,13.9,Unreliable supplier (52% on time over 64 deliveries)
+29,4500000432,S004,MAT-1001,High,10141.22,2026-11-10,29,False,22.0,False,0.746,0.254,On track,35,16.8,Low,13.9,"Stock covers 22 day(s), delivery promised in 29 day(s)"
+30,4500000482,S011,MAT-3004,Low,2427.92,2026-11-27,46,False,32.6,False,0.659,0.341,On track,60,26.5,Low,13.7,"Stock covers 33 day(s), delivery promised in 46 day(s); Unreliable supplier (66% on time over 85 deliveries)"
+31,4500000489,S013,MAT-3001,Low,5460.5,2026-11-04,23,False,8.0,True,0.931,0.069,On track,75,24.2,Low,13.7,"Stock below safety stock (1605 < 1887); Stock covers 8 day(s), delivery promised in 23 day(s)"
+32,4500000453,S003,MAT-1001,High,21325.29,2026-11-19,38,False,22.0,False,0.847,0.153,On track,35,14.3,Low,12.9,"Stock covers 22 day(s), delivery promised in 38 day(s)"
+33,4500000499,S022,MAT-5003,High,3858.4,2026-11-11,30,False,27.6,False,0.774,0.226,On track,35,16.2,Low,12.6,"Stock covers 28 day(s), delivery promised in 30 day(s)"
+34,4500000488,S018,MAT-4004,Medium,3200.0,2026-11-12,31,False,20.8,False,0.7,0.3,On track,35,18.0,Low,11.7,"Stock covers 21 day(s), delivery promised in 31 day(s)"
+35,4500000479,S009,MAT-2003,Medium,5257.2,2026-11-13,32,False,25.3,False,0.742,0.258,On track,35,17.0,Low,11.3,"Stock covers 25 day(s), delivery promised in 32 day(s)"
+36,4500000494,S009,MAT-2003,Medium,4730.93,2026-11-10,29,False,25.3,False,0.742,0.258,On track,35,17.0,Low,11.3,"Stock covers 25 day(s), delivery promised in 29 day(s)"
+37,4500000467,S023,MAT-5003,High,4703.16,2026-11-17,36,False,27.6,False,0.875,0.125,On track,35,13.6,Low,10.7,"Stock covers 28 day(s), delivery promised in 36 day(s)"
+38,4500000458,S024,MAT-5001,Medium,5216.37,2026-11-20,39,False,32.5,False,0.829,0.171,On track,35,14.8,Low,9.8,"Stock covers 32 day(s), delivery promised in 39 day(s)"
+39,4500000424,S011,MAT-3002,Low,3377.92,2026-10-18,6,False,25.1,False,0.659,0.341,On track,25,16.0,Low,9.7,Unreliable supplier (66% on time over 85 deliveries)
+40,4500000454,S009,MAT-2004,Low,9604.0,2026-11-21,40,False,14.0,False,0.742,0.258,On track,35,17.0,Low,9.7,"Stock covers 14 day(s), delivery promised in 40 day(s)"
+41,4500000403,S017,MAT-4003,Low,2260.25,2026-10-17,5,False,21.8,False,0.658,0.342,On track,25,16.0,Low,9.6,Unreliable supplier (66% on time over 79 deliveries)
+42,4500000500,S011,MAT-3002,Low,4860.36,2026-10-22,10,False,25.1,False,0.659,0.341,On track,25,16.0,Low,9.6,Unreliable supplier (66% on time over 85 deliveries)
+43,4500000437,S018,MAT-4003,Low,2720.88,2026-11-08,27,False,21.8,False,0.7,0.3,On track,35,18.0,Low,9.5,"Stock covers 22 day(s), delivery promised in 27 day(s)"
+44,4500000414,S021,MAT-5004,Low,1100.16,2026-10-30,18,False,15.6,False,0.759,0.241,On track,35,16.5,Low,9.0,"Stock covers 16 day(s), delivery promised in 18 day(s)"
+45,4500000495,S021,MAT-5004,Low,2777.28,2026-11-20,39,False,15.6,False,0.759,0.241,On track,35,16.5,Low,8.6,"Stock covers 16 day(s), delivery promised in 39 day(s)"
+46,4500000497,S013,MAT-3003,Medium,3011.19,2026-11-06,25,False,19.6,False,0.931,0.069,On track,35,12.2,Low,8.1,"Stock covers 20 day(s), delivery promised in 25 day(s)"
+47,4500000476,S023,MAT-5004,Low,2375.73,2026-10-28,16,False,15.6,False,0.875,0.125,On track,35,13.6,Low,7.7,"Stock covers 16 day(s), delivery promised in 16 day(s)"
+48,4500000496,S009,MAT-2001,High,17836.16,2026-10-20,8,False,33.8,False,0.742,0.258,On track,0,6.4,Low,6.1,No risk factor identified
+49,4500000430,S001,MAT-1002,Medium,7327.74,2026-10-18,6,False,32.0,False,0.701,0.299,On track,0,7.5,Low,5.7,No risk factor identified
+50,4500000394,S002,MAT-1001,High,20171.54,2026-10-14,2,False,22.0,False,0.806,0.194,On track,0,4.9,Low,4.9,No risk factor identified
+51,4500000376,S009,MAT-2003,Medium,5708.34,2026-10-16,4,False,25.3,False,0.742,0.258,On track,0,6.4,Low,4.8,No risk factor identified
+52,4500000441,S021,MAT-5002,Medium,5111.59,2026-10-23,11,False,32.7,False,0.759,0.241,On track,0,6.0,Low,4.4,No risk factor identified
+53,4500000465,S021,MAT-5002,Medium,6315.98,2026-10-28,16,False,32.7,False,0.759,0.241,On track,0,6.0,Low,4.3,No risk factor identified
+54,4500000481,S022,MAT-5001,Medium,5414.99,2026-10-12,0,False,32.5,False,0.774,0.226,On track,0,5.6,Low,4.3,No risk factor identified
+55,4500000469,S022,MAT-5001,Medium,4573.68,2026-11-06,25,False,32.5,False,0.774,0.226,On track,0,5.6,Low,3.8,No risk factor identified
+56,4500000478,S022,MAT-5001,Medium,2650.49,2026-11-08,27,False,32.5,False,0.774,0.226,On track,0,5.6,Low,3.7,No risk factor identified
+57,4500000463,S004,MAT-1004,Low,5883.75,2026-11-08,27,False,31.6,False,0.746,0.254,On track,0,6.4,Low,3.5,No risk factor identified
+58,4500000484,S022,MAT-5004,Low,1028.5,2026-10-15,3,False,15.6,False,0.774,0.226,On track,0,5.6,Low,3.3,No risk factor identified
+59,4500000395,S014,MAT-3003,Medium,1746.82,2026-10-27,15,False,19.6,False,0.818,0.182,On track,0,4.6,Low,3.2,No risk factor identified
+60,4500000431,S022,MAT-5004,Low,1556.82,2026-10-25,13,False,15.6,False,0.774,0.226,On track,0,5.6,Low,3.2,No risk factor identified
+61,4500000412,S023,MAT-5003,High,3364.52,2026-10-16,4,False,27.6,False,0.875,0.125,On track,0,3.1,Low,2.7,No risk factor identified
+62,4500000446,S003,MAT-1002,Medium,7411.14,2026-11-04,23,False,32.0,False,0.847,0.153,On track,0,3.8,Low,2.7,No risk factor identified
+63,4500000444,S024,MAT-5004,Low,2157.38,2026-10-20,8,False,15.6,False,0.829,0.171,On track,0,4.3,Low,2.5,No risk factor identified
+64,4500000492,S003,MAT-1004,Low,7687.7,2026-10-21,9,False,31.6,False,0.847,0.153,On track,0,3.8,Low,2.4,No risk factor identified
+65,4500000440,S023,MAT-5002,Medium,9392.46,2026-10-29,17,False,32.7,False,0.875,0.125,On track,0,3.1,Low,2.3,No risk factor identified
+66,4500000480,S023,MAT-5001,Medium,6490.8,2026-11-11,30,False,32.5,False,0.875,0.125,On track,0,3.1,Low,2.1,No risk factor identified
+67,4500000460,S005,MAT-1002,Medium,12156.0,2026-10-24,12,False,32.0,False,0.911,0.089,On track,0,2.2,Low,1.7,No risk factor identified
+68,4500000438,S005,MAT-1002,Medium,14591.62,2026-11-10,29,False,32.0,False,0.911,0.089,On track,0,2.2,Low,1.6,No risk factor identified
